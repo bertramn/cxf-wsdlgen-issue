@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings version="2.1"
+          xmlns="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:annox="http://annox.dev.java.net"
+          xmlns:im="urn:some.model"
+          xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+          xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
+          extensionBindingPrefixes="xjc annox namespace simplify">
+
+
+  <bindings if-exists="true" scd="x-schema::im">
+    <schemaBindings map="false">
+      <package name="some.model"/>
+    </schemaBindings>
+    <bindings if-exists="true" scd="~im:SomeDomainEntity">
+      <class ref="some.model.SomeDomainEntity"/>
+    </bindings>
+  </bindings>
+
+</bindings>

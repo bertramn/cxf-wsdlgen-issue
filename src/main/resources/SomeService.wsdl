@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SomeService"
+                  targetNamespace="urn:some.service"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="urn:some.service"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:m="urn:some.model"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+  <wsdl:types>
+    <xsd:schema xmlns="urn:some.model"
+                targetNamespace="urn:some.model">
+      <xsd:include schemaLocation="SomeMsg.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="SomeRQ">
+    <wsdl:part name="body" element="m:SomeRQ"/>
+  </wsdl:message>
+
+  <wsdl:message name="SomeRS">
+    <wsdl:part name="body" element="m:SomeRS"/>
+  </wsdl:message>
+
+  <wsdl:portType name="SomePort">
+    <wsdl:operation name="invoke">
+      <wsdl:input name="in" message="tns:SomeRQ"/>
+      <wsdl:output name="out" message="tns:SomeRS"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="SomeBinding" type="tns:SomePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="invoke">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="in">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="out">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="SomeService">
+    <wsdl:port name="SomePort" binding="tns:SomeBinding">
+      <soap:address location="http://localhost:8080/Some"/>
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>

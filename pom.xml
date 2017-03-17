@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.github.bertramn.issues</groupId>
+  <artifactId>cxf-wsdlgen-issue</artifactId>
+  <version>1.0.0</version>
+  <name>CXF wsdl2java Gen Issue</name>
+  <description>Minimal example how cxf fails to generate from a valid WSDL</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-tools-wsdlto-frontend-jaxws</artifactId>
+      <version>3.1.10</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- generate services bindings from a wsdl contract -->
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <version>${cxf.version}</version>
+        <executions>
+          <execution>
+            <id>generate-wsdl-bindings</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+            <configuration>
+              <wsdlOptions>
+                <wsdlOption>
+                  <bindingFiles>
+                    <bindingFile>${project.basedir}/src/main/resources/default.xjb</bindingFile>
+                  </bindingFiles>
+                  <wsdl>${project.basedir}/src/main/resources/SomeService.wsdl</wsdl>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.6.1</version>
+          <configuration>
+            <source>${maven.compile.source}</source>
+            <target>${maven.compile.target}</target>
+            <!-- compiler debug -->
+            <debug>true</debug>
+            <debuglevel>lines,vars,source</debuglevel>
+            <optimize>true</optimize>
+            <!-- make sure latest jaxb is picked up for older jdk -->
+            <compilerArguments>
+              <endorseddirs>${project.build.directory}/endorsed</endorseddirs>
+            </compilerArguments>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compile.source>1.7</maven.compile.source>
+    <maven.compile.target>1.7</maven.compile.target>
+    <jaxb.api.version>2.2.11</jaxb.api.version>
+    <jaxb.version>2.2.11</jaxb.version>
+    <jaxws.version>2.2.10</jaxws.version>
+    <cxf.version>3.1.10</cxf.version>
+  </properties>
+
+</project>
