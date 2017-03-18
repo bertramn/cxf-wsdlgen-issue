@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.github.bertramn.issues</groupId>
+    <artifactId>cxf-wsdlgen-issue</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>cxf-wsdlgen-issue-common</artifactId>
+  <name>CXF wsdl2java Gen Issue Common</name>
+
+  <properties>
+    <model.name>types</model.name>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.fares.maven.plugins</groupId>
+        <artifactId>design-builder-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

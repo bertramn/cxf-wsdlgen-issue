@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="urn:some.model" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:tns="urn:some.model" elementFormDefault="qualified"
+<xsd:schema targetNamespace="urn:model" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="urn:model" elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
   <xsd:include schemaLocation="SomeEntity.xsd"/>
 
   <xsd:element name="SomeRQ" type="tns:SomeRQ"/>
   <xsd:complexType name="SomeRQ">
-
+    <xsd:sequence>
+      <xsd:element name="CustomerId" type="xsd:string"/>
+    </xsd:sequence>
   </xsd:complexType>
 
   <xsd:element name="SomeRS" type="tns:SomeRS"/>
   <xsd:complexType name="SomeRS">
-
+    <xsd:sequence>
+      <xsd:element ref="tns:SomeDomainEntity"/>
+    </xsd:sequence>
   </xsd:complexType>
 
 </xsd:schema>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="SomeService"
-                  targetNamespace="urn:some.service"
+                  targetNamespace="urn:service"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                  xmlns:tns="urn:some.service"
+                  xmlns:tns="urn:service"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:m="urn:some.model"
+                  xmlns:m="urn:model"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
 
   <wsdl:types>
-    <xsd:schema xmlns="urn:some.model"
-                targetNamespace="urn:some.model">
+    <xsd:schema xmlns="urn:model"
+                targetNamespace="urn:model">
       <xsd:include schemaLocation="SomeMsg.xsd"/>
     </xsd:schema>
   </wsdl:types>

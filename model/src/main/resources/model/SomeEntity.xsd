@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:model" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="urn:model" elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+  <xsd:include schemaLocation="DataTypes.xsd"/>
+
+  <xsd:element name="SomeDomainEntity" type="tns:SomeDomainEntity"/>
+  <xsd:complexType name="SomeDomainEntity">
+    <xsd:sequence>
+      <xsd:element name="Description" type="xsd:string" minOccurs="1"/>
+      <xsd:element ref="tns:Contacts"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="tns:ObjectId" use="required"/>
+  </xsd:complexType>
+
+  <xsd:element name="Contacts" type="tns:ContactList">
+    <xsd:key name="HomeContactKey">
+      <xsd:selector xpath="tns:HomeContact"/>
+      <xsd:field xpath="@id"/>
+    </xsd:key>
+    <xsd:key name="BusinessContactKey">
+      <xsd:selector xpath="tns:BusinessContact"/>
+      <xsd:field xpath="@id"/>
+    </xsd:key>
+  </xsd:element>
+  <xsd:complexType name="ContactList">
+    <xsd:choice maxOccurs="99">
+      <xsd:element ref="tns:HomeContact" minOccurs="1"/>
+      <xsd:element ref="tns:BusinessContact" minOccurs="1"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:element name="HomeContact" type="tns:HomeContact"/>
+  <xsd:complexType name="HomeContact">
+    <xsd:complexContent>
+      <xsd:extension base="tns:Contact">
+        <xsd:attribute name="homie" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="BusinessContact" type="tns:BusinessContact"/>
+  <xsd:complexType name="BusinessContact">
+    <xsd:complexContent>
+      <xsd:extension base="tns:Contact">
+        <xsd:attribute name="bussy" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Contact">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="Number" type="xsd:string"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string"/>
+  </xsd:complexType>
+
+
+</xsd:schema>

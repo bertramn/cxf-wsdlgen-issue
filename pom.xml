@@ -6,45 +6,18 @@
   <groupId>io.github.bertramn.issues</groupId>
   <artifactId>cxf-wsdlgen-issue</artifactId>
   <version>1.0.0</version>
+  <packaging>pom</packaging>
   <name>CXF wsdl2java Gen Issue</name>
   <description>Minimal example how cxf fails to generate from a valid WSDL</description>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-tools-wsdlto-frontend-jaxws</artifactId>
-      <version>3.1.10</version>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>transformer</module>
+    <module>common</module>
+    <module>model</module>
+    <module>service</module>
+  </modules>
 
   <build>
-    <plugins>
-      <!-- generate services bindings from a wsdl contract -->
-      <plugin>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-codegen-plugin</artifactId>
-        <version>${cxf.version}</version>
-        <executions>
-          <execution>
-            <id>generate-wsdl-bindings</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>wsdl2java</goal>
-            </goals>
-            <configuration>
-              <wsdlOptions>
-                <wsdlOption>
-                  <bindingFiles>
-                    <bindingFile>${project.basedir}/src/main/resources/default.xjb</bindingFile>
-                  </bindingFiles>
-                  <wsdl>${project.basedir}/src/main/resources/SomeService.wsdl</wsdl>
-                </wsdlOption>
-              </wsdlOptions>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -64,9 +37,184 @@
             </compilerArguments>
           </configuration>
         </plugin>
+        <!-- build support -->
+        <plugin>
+          <groupId>io.fares.maven.plugins</groupId>
+          <artifactId>design-builder-maven-plugin</artifactId>
+          <version>${design.builder.version}</version>
+          <executions>
+            <execution>
+              <!-- this execution will ensure a catalog.xml file is packaged with the release bundle -->
+              <id>generate-model-catalog</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>catalog</goal>
+              </goals>
+              <configuration>
+                <sourceDirectory>${project.build.outputDirectory}/${model.name}/</sourceDirectory>
+                <targetCatalogFile>${project.build.outputDirectory}/${model.name}.cat</targetCatalogFile>
+                <systemIdPathOffset>0</systemIdPathOffset>
+                <includes>
+                  <include>**/*.xsd</include>
+                </includes>
+                <verbose>true</verbose>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- generate service bindings -->
+        <plugin>
+          <groupId>org.apache.cxf</groupId>
+          <artifactId>cxf-codegen-plugin</artifactId>
+          <version>${cxf.version}</version>
+          <configuration>
+            <defaultOptions>
+              <faultSerialVersionUID>1</faultSerialVersionUID>
+              <extraargs>
+                <extraarg>-xjc-Xxew</extraarg>
+                <extraarg>-xjc-enableIntrospection</extraarg>
+                <!-- disable the package header in this compilation as we already have one that is going to be shaded in -->
+                <extraarg>-xjc-npa</extraarg>
+                <!-- no pesky boilerplate in sources -->
+                <extraarg>-xjc-no-header</extraarg>
+                <extraarg>-verbose</extraarg>
+                <extraarg>-autoNameResolution</extraarg>
+                <extraarg>-aer</extraarg>
+              </extraargs>
+            </defaultOptions>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.github.jaxb-xew-plugin</groupId>
+              <artifactId>jaxb-xew-plugin</artifactId>
+              <version>1.9</version>
+              <exclusions>
+                <exclusion>
+                  <groupId>javax.xml.bind</groupId>
+                  <artifactId>jaxb-api</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>com.sun.xml.bind</groupId>
+                  <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>com.sun.xml.bind</groupId>
+                  <artifactId>jaxb-xjc</artifactId>
+                </exclusion>
+              </exclusions>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <!-- generate model bindings -->
+        <plugin>
+          <groupId>org.jvnet.jaxb2.maven2</groupId>
+          <artifactId>maven-jaxb2-plugin</artifactId>
+          <version>0.13.1</version>
+          <configuration>
+            <extension>true</extension>
+            <verbose>true</verbose>
+            <debug>false</debug>
+            <strict>false</strict>
+            <args>
+              <arg>-Xxew</arg>
+              <arg>-no-header</arg>
+              <arg>-enableIntrospection</arg>
+            </args>
+            <schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
+            <schemaIncludes>
+              <include>**/*.xsd</include>
+            </schemaIncludes>
+            <bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+            <bindingIncludes>
+              <include>**/*.xjb</include>
+              <include>**/*xjc-only.episode</include>
+            </bindingIncludes>
+            <episode>true</episode>
+            <episodeFile>${project.build.directory}/generated-sources/episodes/sun-jaxb.episode</episodeFile>
+            <plugins>
+              <plugin>
+                <groupId>com.github.jaxb-xew-plugin</groupId>
+                <artifactId>jaxb-xew-plugin</artifactId>
+                <version>1.9</version>
+                <exclusions>
+                  <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                  </exclusion>
+                  <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                  </exclusion>
+                  <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-xjc</artifactId>
+                  </exclusion>
+                </exclusions>
+              </plugin>
+            </plugins>
+          </configuration>
+          <executions>
+            <execution>
+              <id>generate-model</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- post process episode files to include possible binding customisations -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>xml-maven-plugin</artifactId>
+          <version>1.0.1</version>
+          <dependencies>
+            <dependency>
+              <groupId>net.sf.saxon</groupId>
+              <artifactId>Saxon-HE</artifactId>
+              <version>9.7.0-15</version>
+            </dependency>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>cxf-wsdlgen-issue-transformer</artifactId>
+              <version>${project.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <!-- extract episode files for post processing from upstream model -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>cxf-wsdlgen-issue-transformer</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>cxf-wsdlgen-issue-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>cxf-wsdlgen-issue-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>cxf-wsdlgen-issue-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,6 +224,8 @@
     <jaxb.version>2.2.11</jaxb.version>
     <jaxws.version>2.2.10</jaxws.version>
     <cxf.version>3.1.10</cxf.version>
+    <design.builder.version>0.0.12</design.builder.version>
+    <jaxb.episode.postprocessor>META-INF/default-episode-postprocessor.xsl</jaxb.episode.postprocessor>
   </properties>
 
 </project>
