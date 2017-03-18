@@ -13,11 +13,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>xml-maven-plugin</artifactId>
-      <version>RELEASE</version>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>cxf-wsdlgen-issue-common</artifactId>
     </dependency>
@@ -57,54 +52,6 @@
           </execution>
         </executions>
       </plugin>
-      <!-- extract episode files for post processing from upstream model -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-dependencies</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeGroupIds>${project.groupId}</includeGroupIds>
-              <includes>**/*.episode</includes>
-              <excludes>**/sun-jaxb.episode</excludes>
-              <outputDirectory>${project.build.directory}/episode/staging</outputDirectory>
-              <overWriteReleases>true</overWriteReleases>
-              <overWriteSnapshots>true</overWriteSnapshots>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- pre-process episode of the model that has the same namespace as the message schema -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xml-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformationSets>
-                <transformationSet>
-                  <addedToClasspath>false</addedToClasspath>
-                  <outputDir>${project.build.directory}/episode/staging</outputDir>
-                  <dir>${project.build.directory}/episode/staging</dir>
-                  <includes>
-                    <include>**/*.episode</include>
-                  </includes>
-                  <stylesheet>/META-INF/remap-episode-preprocessor.xsl</stylesheet>
-                </transformationSet>
-              </transformationSets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <!-- generate services bindings from a wsdl contract -->
       <plugin>
         <groupId>org.apache.cxf</groupId>
@@ -121,7 +68,7 @@
                 <wsdlOption>
                   <bindingFiles>
                     <bindingFile>classpath:/types.episode</bindingFile>
-                    <bindingFile>${project.build.directory}/episode/staging/model.episode</bindingFile>
+                    <bindingFile>classpath:/model.episode</bindingFile>
                   </bindingFiles>
                   <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
                 </wsdlOption>
