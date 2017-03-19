@@ -10,6 +10,9 @@
   </parent>
   <artifactId>cxf-wsdlgen-issue-service</artifactId>
   <name>CXF wsdl2java Gen Issue Service</name>
+  <properties>
+    <workaround>false</workaround>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -67,28 +70,93 @@
       <plugin>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-codegen-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-wsdl-bindings</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>wsdl2java</goal>
-            </goals>
-            <configuration>
-              <wsdlOptions>
-                <wsdlOption>
-                  <bindingFiles>
-                    <bindingFile>classpath:/types.episode</bindingFile>
-                    <bindingFile>classpath:/model.episode</bindingFile>
-                  </bindingFiles>
-                  <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
-                </wsdlOption>
-              </wsdlOptions>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>original</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>workaround</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-codegen-plugin</artifactId>
+              <inherited>true</inherited>
+              <executions>
+                <execution>
+                  <id>generate-wsdl-bindings</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                    <goal>wsdl2java</goal>
+                  </goals>
+                  <configuration>
+                    <wsdlOptions>
+                      <wsdlOption>
+                        <bindingFiles>
+                          <bindingFile>classpath:/types.episode</bindingFile>
+                          <bindingFile>classpath:/model.episode</bindingFile>
+                        </bindingFiles>
+                        <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
+                      </wsdlOption>
+                    </wsdlOptions>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>workaround</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <property>
+          <name>workaround</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-codegen-plugin</artifactId>
+              <inherited>true</inherited>
+              <executions>
+                <execution>
+                  <id>generate-wsdl-bindings</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                    <goal>wsdl2java</goal>
+                  </goals>
+                  <configuration>
+                    <wsdlOptions>
+                      <wsdlOption>
+                        <bindingFiles>
+                          <bindingFile>classpath:/types.episode</bindingFile>
+                          <bindingFile>${project.basedir}/src/main/resources/workaround.xjb</bindingFile>
+                        </bindingFiles>
+                        <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
+                      </wsdlOption>
+                    </wsdlOptions>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

@@ -34,10 +34,10 @@
     <wsdl:operation name="invoke">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="in">
-        <soap:body use="literal"/>
+        <soap:body parts="body" use="literal"/>
       </wsdl:input>
       <wsdl:output name="out">
-        <soap:body use="literal"/>
+        <soap:body parts="body" use="literal"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>

@@ -24,6 +24,12 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>cxf-wsdlgen-issue-model</artifactId>
     </dependency>
+    <!-- for debugging issue #53 -->
+    <dependency>
+      <groupId>com.github.jaxb-xew-plugin</groupId>
+      <artifactId>jaxb-xew-plugin</artifactId>
+      <version>1.9</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -83,10 +89,10 @@
                   <groupId>${project.groupId}</groupId>
                   <artifactId>cxf-wsdlgen-issue-common</artifactId>
                 </episode>
-                <!--<episode>-->
-                  <!--<groupId>${project.groupId}</groupId>-->
-                  <!--<artifactId>cxf-wsdlgen-issue-model</artifactId>-->
-                <!--</episode>-->
+                <episode>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>cxf-wsdlgen-issue-model</artifactId>
+                </episode>
               </episodes>
             </configuration>
           </execution>

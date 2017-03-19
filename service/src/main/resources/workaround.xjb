@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb" if-exists="true">
+
+  <bindings xmlns:tns="urn:model" scd="x-schema::tns">
+    <!-- the workaround is to set map to true and just list below classes as already present -->
+    <schemaBindings map="true">
+      <package name="model"/>
+    </schemaBindings>
+    <bindings if-exists="true" scd="~tns:SomeDomainEntity">
+      <class ref="model.SomeDomainEntity"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:HomeContact">
+      <class ref="model.HomeContact"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:BusinessContact">
+      <class ref="model.BusinessContact"/>
+    </bindings>
+    <bindings if-exists="true" scd="~tns:Contact">
+      <class ref="model.Contact"/>
+    </bindings>
+  </bindings>
+
+</bindings>
