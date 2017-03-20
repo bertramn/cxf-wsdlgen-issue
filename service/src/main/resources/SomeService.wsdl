@@ -5,12 +5,18 @@
                   xmlns:tns="urn:service"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:m="urn:model"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:u="urn:util">
 
   <wsdl:types>
-    <xsd:schema xmlns="urn:model"
-                targetNamespace="urn:model">
-      <xsd:include schemaLocation="SomeMsg.xsd"/>
+    <xsd:schema xmlns="urn:service" targetNamespace="urn:service">
+      <xsd:import namespace="urn:model" schemaLocation="SomeMsg.xsd"/>
+      <xsd:import namespace="urn:util" schemaLocation="Fault.xsd"/>
+      <xsd:element name="TestMe">
+        <xsd:complexType>
+          <xsd:attribute name="id" type="xsd:string"/>
+        </xsd:complexType>
+      </xsd:element>
     </xsd:schema>
   </wsdl:types>
 
@@ -22,10 +28,15 @@
     <wsdl:part name="body" element="m:SomeRS"/>
   </wsdl:message>
 
+  <wsdl:message name="SomeException">
+    <wsdl:part name="SomeException" element="u:Fault"/>
+  </wsdl:message>
+
   <wsdl:portType name="SomePort">
     <wsdl:operation name="invoke">
       <wsdl:input name="in" message="tns:SomeRQ"/>
       <wsdl:output name="out" message="tns:SomeRS"/>
+      <wsdl:fault name="SomeException" message="tns:SomeException"/>
     </wsdl:operation>
   </wsdl:portType>
 
@@ -34,11 +45,14 @@
     <wsdl:operation name="invoke">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="in">
-        <soap:body parts="body" use="literal"/>
+        <soap:body use="literal" parts="body"/>
       </wsdl:input>
       <wsdl:output name="out">
-        <soap:body parts="body" use="literal"/>
+        <soap:body use="literal" parts="body"/>
       </wsdl:output>
+      <wsdl:fault name="SomeException">
+        <soap:fault name="SomeException" use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
 

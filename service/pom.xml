@@ -10,8 +10,12 @@
   </parent>
   <artifactId>cxf-wsdlgen-issue-service</artifactId>
   <name>CXF wsdl2java Gen Issue Service</name>
+
   <properties>
     <workaround>false</workaround>
+    <common.version>${project.version}</common.version>
+    <util.version>${project.version}</util.version>
+    <model.version>${project.version}</model.version>
   </properties>
 
   <dependencies>
@@ -22,6 +26,10 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>cxf-wsdlgen-issue-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cxf-wsdlgen-issue-util</artifactId>
     </dependency>
     <!-- for debug purposes -->
     <dependency>
@@ -42,36 +50,60 @@
       <plugin>
         <groupId>io.fares.maven.plugins</groupId>
         <artifactId>design-builder-maven-plugin</artifactId>
-        <inherited>true</inherited>
-        <executions>
-          <execution>
-            <id>flatten-wsdl</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>flatten</goal>
-            </goals>
-            <configuration>
-              <catalogFilter>^.*\.cat$</catalogFilter>
-              <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
-              <flattenTarget>file:///${project.basedir}/src/main/resources/SomeService.wsdl</flattenTarget>
-            </configuration>
-          </execution>
-          <execution>
-            <!-- disable -->
-            <id>generate-model-catalog</id>
-            <phase>none</phase>
-            <goals>
-              <goal>catalog</goal>
-            </goals>
-          </execution>
-        </executions>
+      </plugin>
+      <!-- extract episode files for pre processing of upstream compilation episodes -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <!-- pre-process episode of the model that has the same namespace as the message schema -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>xml-maven-plugin</artifactId>
       </plugin>
       <!-- generate services bindings from a wsdl contract -->
       <plugin>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-codegen-plugin</artifactId>
       </plugin>
+      <!-- ant used to clean up after xjc generating too many object factories in service binding -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+      </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <!-- package wsdl (same for every execution) -->
+        <plugin>
+          <groupId>io.fares.maven.plugins</groupId>
+          <artifactId>design-builder-maven-plugin</artifactId>
+          <inherited>true</inherited>
+          <executions>
+            <execution>
+              <id>flatten-wsdl</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+              <configuration>
+                <catalogFilter>^.*\.cat$</catalogFilter>
+                <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                <flattenTarget>file:///${project.basedir}/src/main/resources/SomeService.wsdl</flattenTarget>
+              </configuration>
+            </execution>
+            <execution>
+              <!-- disable -->
+              <id>generate-model-catalog</id>
+              <phase>none</phase>
+              <goals>
+                <goal>catalog</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <profiles>
@@ -104,6 +136,7 @@
                         <bindingFiles>
                           <bindingFile>classpath:/types.episode</bindingFile>
                           <bindingFile>classpath:/model.episode</bindingFile>
+                          <bindingFile>classpath:/util.episode</bindingFile>
                         </bindingFiles>
                         <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
                       </wsdlOption>
@@ -128,6 +161,60 @@
       <build>
         <pluginManagement>
           <plugins>
+            <!-- extract episode files for pre processing of upstream compilation episodes -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>extract-dependency-episodes</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                    <goal>unpack-dependencies</goal>
+                  </goals>
+                  <configuration>
+                    <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+                    <markersDirectory>${project.build.directory}/dependency-maven-plugin-episode-markers</markersDirectory>
+                    <includeGroupIds>${project.groupId}</includeGroupIds>
+                    <includes>**/sun-jaxb.episode</includes>
+                    <outputDirectory>${project.build.directory}/episodes</outputDirectory>
+                    <overWriteReleases>true</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+            <!-- pre-process episode of the model that has the same namespace as the message schema -->
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>xml-maven-plugin</artifactId>
+              <executions>
+                <execution>
+                  <phase>generate-sources</phase>
+                  <goals>
+                    <goal>transform</goal>
+                  </goals>
+                  <configuration>
+                    <transformationSets>
+                      <transformationSet>
+                        <addedToClasspath>false</addedToClasspath>
+                        <outputDir>${project.build.directory}/episodes</outputDir>
+                        <dir>${project.build.directory}/episodes</dir>
+                        <includes>
+                          <include>**/*.episode</include>
+                        </includes>
+                        <excludes>
+                          <!-- never re-map chameleon schema from common types back in -->
+                          <exclude>cxf-wsdlgen-issue-common-*/**</exclude>
+                        </excludes>
+                        <stylesheet>/META-INF/remap-episode-preprocessor.xsl</stylesheet>
+                      </transformationSet>
+                    </transformationSets>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+            <!-- generate service using the pre-processed episodes -->
             <plugin>
               <groupId>org.apache.cxf</groupId>
               <artifactId>cxf-codegen-plugin</artifactId>
@@ -144,11 +231,33 @@
                       <wsdlOption>
                         <bindingFiles>
                           <bindingFile>classpath:/types.episode</bindingFile>
-                          <bindingFile>${project.basedir}/src/main/resources/workaround.xjb</bindingFile>
+                          <!-- reference the pre-processed episodes from our dependant schemata -->
+                          <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-model-${model.version}-jar/sun-jaxb.episode</bindingFile>
+                          <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-util-${util.version}-jar/sun-jaxb.episode
+                          </bindingFile>
                         </bindingFiles>
                         <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
                       </wsdlOption>
                     </wsdlOptions>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+            <!-- ant used to clean up after xjc generating too many object factories in service binding -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-antrun-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>xjc-eager-generation-cleanup</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                    <goal>run</goal>
+                  </goals>
+                  <configuration>
+                    <target>
+                      <delete dir="${project.build.directory}/generated-sources/cxf/util"/>
+                    </target>
                   </configuration>
                 </execution>
               </executions>
