@@ -43,19 +43,19 @@ parent
   |
   +-- service
         |
-		+-- message schema in urn:model
-		|    |
-		|    +-- include model schema
-		|    |
-		|    +-- the wsdl operation message element is defined in this schema file
+        +-- message schema in urn:model
+        |    |
+        |    +-- include model schema
+        |    |
+        |    +-- the wsdl operation message element is defined in this schema file
         |
         +-- wsdl in urn:service
-		     |
-			 +-- import message schema
-			 |
-			 +-- wsdl messages reference request and response payload from message schema
-			 |
-			 +-- wsdl operation references above wsdl messages
+             |
+             +-- import message schema
+             |
+             +-- wsdl messages reference request and response payload from message schema
+             |
+             +-- wsdl operation references above wsdl messages
 ```
 
 The test case is setup in a way that one can see the wsdl generation failing in its original form:
@@ -76,23 +76,23 @@ In `com.sun.tools.xjc.reader.xmlschema.BGMBuilder:L299` any schema that has it's
 
 ```java
 for( XSSchema s : Ring.get(XSSchemaSet.class).getSchemas() ) {
-	BISchemaBinding sb = getBindInfo(s).get(BISchemaBinding.class);
+    BISchemaBinding sb = getBindInfo(s).get(BISchemaBinding.class);
 
-	if(sb!=null && !sb.map) {
-		sb.markAsAcknowledged();
-		continue;       // no mapping for this package  <<<<<<<<<<<<<<<< schema is part of a previous episode
-	}
+    if(sb!=null && !sb.map) {
+        sb.markAsAcknowledged();
+        continue;       // no mapping for this package  <<<<<<<<<<<<<<<< schema is part of a previous episode
+    }
 
-	getClassSelector().pushClassScope( new CClassInfoParent.Package(
-		getClassSelector().getPackage(s.getTargetNamespace())) );
+    getClassSelector().pushClassScope( new CClassInfoParent.Package(
+        getClassSelector().getPackage(s.getTargetNamespace())) );
 
-	checkMultipleSchemaBindings(s);
-	processPackageJavadoc(s);
-	populate(s.getAttGroupDecls(),s);
-	populate(s.getAttributeDecls(),s);
-	populate(s.getElementDecls(),s);                    <<<<<<<<<<<<<<<< XJC would have to reach here to populate the supplied CXF ClassSelector
-	populate(s.getModelGroupDecls(),s);
-	
+    checkMultipleSchemaBindings(s);
+    processPackageJavadoc(s);
+    populate(s.getAttGroupDecls(),s);
+    populate(s.getAttributeDecls(),s);
+    populate(s.getElementDecls(),s);                    <<<<<<<<<<<<<<<< XJC would have to reach here to populate the supplied CXF ClassSelector
+    populate(s.getModelGroupDecls(),s);
+    ...
 }
 ```
 
@@ -147,8 +147,8 @@ Using following episode file:
     <schemaBindings map="false">
       <package name="model"/>
     </schemaBindings>
-	
-	<bindings if-exists="true" scd="~tns:SomeDomainEntity">
+    
+    <bindings if-exists="true" scd="~tns:SomeDomainEntity">
       <class ref="model.SomeDomainEntity"/>
     </bindings>
     ...
