@@ -3,7 +3,7 @@
             xmlns:tns="urn:model" elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
-  <xsd:include schemaLocation="SomeEntity.xsd"/>
+  <xsd:include schemaLocation="urn:model:SomeEntity.xsd"/>
 
   <xsd:element name="SomeRQ" type="tns:SomeRQ"/>
   <xsd:complexType name="SomeRQ">

@@ -87,6 +87,7 @@
                 <goal>flatten</goal>
               </goals>
               <configuration>
+                <verbose>true</verbose>
                 <catalogFilter>^.*\.cat$</catalogFilter>
                 <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
                 <flattenTarget>file:///${project.basedir}/src/main/resources/SomeService.wsdl</flattenTarget>
@@ -233,8 +234,7 @@
                           <bindingFile>classpath:/types.episode</bindingFile>
                           <!-- reference the pre-processed episodes from our dependant schemata -->
                           <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-model-${model.version}-jar/sun-jaxb.episode</bindingFile>
-                          <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-util-${util.version}-jar/sun-jaxb.episode
-                          </bindingFile>
+                          <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-util-${util.version}-jar/sun-jaxb.episode</bindingFile>
                         </bindingFiles>
                         <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>
                       </wsdlOption>

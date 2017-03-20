@@ -4,14 +4,14 @@
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                   xmlns:tns="urn:service"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:m="urn:model"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:m="urn:model"
                   xmlns:u="urn:util">
 
   <wsdl:types>
     <xsd:schema xmlns="urn:service" targetNamespace="urn:service">
       <xsd:import namespace="urn:model" schemaLocation="SomeMsg.xsd"/>
-      <xsd:import namespace="urn:util" schemaLocation="Fault.xsd"/>
+      <xsd:import namespace="urn:util" schemaLocation="urn:util:Fault.xsd"/>
       <xsd:element name="TestMe">
         <xsd:complexType>
           <xsd:attribute name="id" type="xsd:string"/>

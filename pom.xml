@@ -55,7 +55,11 @@
               <configuration>
                 <sourceDirectory>${project.build.outputDirectory}/${model.name}/</sourceDirectory>
                 <targetCatalogFile>${project.build.outputDirectory}/${model.name}.cat</targetCatalogFile>
-                <systemIdPathOffset>0</systemIdPathOffset>
+                <catalog>
+                  <system>
+                    <defaultSystemId>urn:types</defaultSystemId>
+                  </system>
+                </catalog>
                 <includes>
                   <include>**/*.xsd</include>
                 </includes>
@@ -242,7 +246,7 @@
     <jaxb.version>2.2.11</jaxb.version>
     <jaxws.version>2.2.10</jaxws.version>
     <cxf.version>3.1.10</cxf.version>
-    <design.builder.version>0.0.12</design.builder.version>
+    <design.builder.version>0.1.0</design.builder.version>
     <jaxb.episode.postprocessor>META-INF/default-episode-postprocessor.xsl</jaxb.episode.postprocessor>
   </properties>
 
