@@ -13,12 +13,10 @@
   </xsl:template>
 
   <!-- Identity template for copying everything else -->
-  <xsl:template match="node() | @*" name="identity">
+  <xsl:template match="@*[not(local-name() = 'map' and parent::jaxb:schemaBindings)] | node()[not(self::comment())]" name="identity">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*"/>
     </xsl:copy>
   </xsl:template>
-
-  <xsl:template match="comment()"/>
 
 </xsl:stylesheet>

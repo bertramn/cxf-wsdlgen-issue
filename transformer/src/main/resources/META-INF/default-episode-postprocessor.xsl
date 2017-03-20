@@ -26,14 +26,12 @@
     </xsl:comment>
   </xsl:template>
 
-  <!-- Identity template for copying everything else -->
-  <xsl:template match="node() | @*" name="identity">
+  <!-- template for copying everything else but comments -->
+  <xsl:template match="@* | node()[not(self::comment())]" name="identity">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*"/>
     </xsl:copy>
   </xsl:template>
-
-  <xsl:template match="comment()"/>
 
   <!-- cleanup functions -->
   <xsl:template name="stripPackageFromClassName">
