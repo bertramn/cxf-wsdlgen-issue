@@ -52,6 +52,35 @@
           <version>${design.builder.version}</version>
           <executions>
             <execution>
+              <!-- this execution will create a catalog.xml file for design time
+                tool support -->
+              <id>generate-design-catalog</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>catalog</goal>
+              </goals>
+              <configuration>
+                <targetCatalogFile>${project.basedir}/design-catalog.xml</targetCatalogFile>
+                <includes>
+                  <include>src/**/*.xsd</include>
+                </includes>
+                <verbose>false</verbose>
+                <catalog>
+                  <prefer>public</prefer>
+                  <public>
+                    <publicId>${model.uri}</publicId>
+                    <appendSchemaFile>true</appendSchemaFile>
+                  </public>
+                  <!-- we need this as a hack to keep the xjc compiler happy when it tries to
+                  resolve schemaLocation in jaxb binding files -->
+                  <system>
+                    <systemId>${model.uri}</systemId>
+                    <appendSchemaFile>true</appendSchemaFile>
+                  </system>
+                </catalog>
+              </configuration>
+            </execution>
+            <execution>
               <!-- this execution will ensure a catalog.xml file is packaged with the release bundle -->
               <id>generate-model-catalog</id>
               <phase>process-resources</phase>
@@ -340,6 +369,8 @@
     <cxf.version>3.2.0</cxf.version>
     <design.builder.version>0.1.3</design.builder.version>
     <jaxb.episode.postprocessor>META-INF/default-episode-postprocessor.xsl</jaxb.episode.postprocessor>
+    <model.name/>
+    <model.uri>urn:${model.name}</model.uri>
   </properties>
 
 </project>

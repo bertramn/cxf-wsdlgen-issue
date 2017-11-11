@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xsd:schema xmlns="urn:types"
+            targetNamespace="urn:types"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
 
   <xsd:simpleType name="ObjectId">
     <xsd:restriction base="xsd:string">
@@ -9,7 +12,8 @@
 
   <xsd:simpleType name="TimeZone">
     <xsd:annotation>
-      <xsd:documentation>Time zone can be either City/Country, Country Code or the GMT representation. Example: Australia/Brisbane</xsd:documentation>
+      <xsd:documentation>Time zone can be either City/Country, Country Code or the GMT representation. Example: Australia/Brisbane
+      </xsd:documentation>
     </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[A-Za-z/_]+"/>

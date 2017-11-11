@@ -4,7 +4,7 @@
                jaxb:extensionBindingPrefixes="xjc"
                jaxb:version="2.1">
 
-  <jaxb:globalBindings xmlns:c="urn:model"
+  <jaxb:globalBindings xmlns:c="urn:types"
                        fixedAttributeAsConstantProperty="true"
                        generateElementProperty="false"
                        generateIsSetMethod="false">

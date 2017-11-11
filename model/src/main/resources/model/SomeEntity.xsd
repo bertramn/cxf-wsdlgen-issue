@@ -5,7 +5,6 @@
             xmlns:c="urn:types"
             elementFormDefault="qualified">
 
-  <xsd:include schemaLocation="urn:types:DataTypes.xsd"/>
   <xsd:import namespace="urn:types" schemaLocation="urn:types:Common.xsd"/>
 
   <xsd:element name="SomeDomainEntity" type="tns:SomeDomainEntity"/>
@@ -13,7 +12,7 @@
     <xsd:sequence>
       <xsd:element name="Description" type="xsd:string" minOccurs="1"/>
       <xsd:element ref="tns:Contacts"/>
-      <xsd:element name="TimeZone" type="tns:TimeZone"/>
+      <xsd:element name="TimeZone" type="c:TimeZone"/>
       <xsd:element name="ArrivalTime" type="xsd:dateTime"/>
       <xsd:element name="CommonSomething" type="c:SomeCommonType"/>
     </xsd:sequence>

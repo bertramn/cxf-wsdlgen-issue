@@ -30,10 +30,33 @@
         <groupId>io.fares.maven.plugins</groupId>
         <artifactId>design-builder-maven-plugin</artifactId>
       </plugin>
-      <!-- generate model bindings -->
+      <!-- generate type bindings -->
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>
+        <inherited>true</inherited>
+        <executions>
+          <execution>
+            <id>generate-model</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <catalogs>
+                <catalog>
+                  <fileset>
+                    <directory>${project.basedir}</directory>
+                    <includes>
+                      <include>**/design-catalog.xml</include>
+                    </includes>
+                  </fileset>
+                </catalog>
+              </catalogs>
+              <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <!-- ability to post process these bindings -->
       <plugin>
