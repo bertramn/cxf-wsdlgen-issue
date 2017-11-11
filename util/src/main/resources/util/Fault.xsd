@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="urn:util"
+<xsd:schema xmlns="urn:util"
+            targetNamespace="urn:util"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:tns="urn:util"
+            xmlns:u="urn:util"
             elementFormDefault="qualified">
 
-  <xsd:element name="Fault" type="tns:Fault"/>
+  <xsd:element name="Fault" type="u:Fault"/>
   <xsd:complexType name="Fault">
     <xsd:sequence>
-      <xsd:element name="Description" type="xsd:string" minOccurs="1"/>
-      <xsd:element name="Cause" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="Description" type="xsd:string"/>
+      <xsd:element name="Cause" type="xsd:string"/>
     </xsd:sequence>
     <xsd:attribute name="code" type="xsd:string" use="required"/>
   </xsd:complexType>

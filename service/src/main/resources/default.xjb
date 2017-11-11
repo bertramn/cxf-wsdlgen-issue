@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bindings version="2.1"
-          xmlns="http://java.sun.com/xml/ns/jaxb"
-          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-          xmlns:annox="http://annox.dev.java.net"
-          xmlns:im="urn:model"
-          xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
-          xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
-          extensionBindingPrefixes="xjc annox namespace simplify">
+<jaxb:bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               xmlns:c="urn:types"
+               jaxb:extensionBindingPrefixes="xjc"
+               jaxb:version="2.1">
 
   <!-- any message model specific bindings -->
+  <jaxb:globalBindings fixedAttributeAsConstantProperty="true"
+                       generateElementProperty="false"
+                       generateIsSetMethod="false">
 
-</bindings>
+    <jaxb:serializable uid="20171110"/>
+
+    <xjc:simple/>
+
+    <xjc:javaType name="org.joda.time.DateTime"
+                  xmlType="xsd:dateTime"
+                  adapter="io.github.bertramn.issues.DateTimeXmlAdapter"/>
+
+    <xjc:javaType name="org.joda.time.DateTimeZone"
+                  xmlType="c:TimeZone"
+                  adapter="io.github.bertramn.issues.TimeZoneXmlAdapter"/>
+
+  </jaxb:globalBindings>
+
+</jaxb:bindings>

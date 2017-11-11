@@ -1,54 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="SomeService"
+                  xmlns="urn:service"
                   targetNamespace="urn:service"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                  xmlns:tns="urn:service"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:m="urn:model"
-                  xmlns:u="urn:util">
+                  xmlns:f="urn:util"
+                  xmlns:s="urn:service">
 
   <wsdl:types>
-    <xsd:schema xmlns="urn:service" targetNamespace="urn:service">
-      <xsd:import namespace="urn:model" schemaLocation="SomeMsg.xsd"/>
+    <xsd:schema xmlns="urn:service"
+                targetNamespace="urn:service"
+                xmlns:f="urn:util"
+                elementFormDefault="qualified">
+
       <xsd:import namespace="urn:util" schemaLocation="urn:util:Fault.xsd"/>
+
+      <xsd:include schemaLocation="SomeMsg.xsd"/>
+
       <xsd:element name="TestMe">
         <xsd:complexType>
           <xsd:attribute name="id" type="xsd:string"/>
         </xsd:complexType>
       </xsd:element>
+
+      <xsd:element name="Dummy" type="f:Fault"/>
+
     </xsd:schema>
   </wsdl:types>
 
-  <wsdl:message name="SomeRQ">
-    <wsdl:part name="body" element="m:SomeRQ"/>
+  <wsdl:message name="SomeRequest">
+    <wsdl:part name="in" element="s:SomeRQ"/>
   </wsdl:message>
 
-  <wsdl:message name="SomeRS">
-    <wsdl:part name="body" element="m:SomeRS"/>
+  <wsdl:message name="SomeResponse">
+    <wsdl:part name="out" element="s:SomeRS"/>
   </wsdl:message>
 
   <wsdl:message name="SomeException">
-    <wsdl:part name="SomeException" element="u:Fault"/>
+    <wsdl:part name="SomeException" element="f:Fault"/>
   </wsdl:message>
 
   <wsdl:portType name="SomePort">
     <wsdl:operation name="invoke">
-      <wsdl:input name="in" message="tns:SomeRQ"/>
-      <wsdl:output name="out" message="tns:SomeRS"/>
-      <wsdl:fault name="SomeException" message="tns:SomeException"/>
+      <wsdl:input name="SomeRequest" message="s:SomeRequest"/>
+      <wsdl:output name="SomeResponse" message="s:SomeResponse"/>
+      <wsdl:fault name="SomeException" message="s:SomeException"/>
     </wsdl:operation>
   </wsdl:portType>
 
-  <wsdl:binding name="SomeBinding" type="tns:SomePort">
+  <wsdl:binding name="SomeBinding" type="s:SomePort">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="invoke">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="in">
-        <soap:body use="literal" parts="body"/>
+      <wsdl:input name="SomeRequest">
+        <soap:body use="literal" parts="in"/>
       </wsdl:input>
-      <wsdl:output name="out">
-        <soap:body use="literal" parts="body"/>
+      <wsdl:output name="SomeResponse">
+        <soap:body use="literal" parts="out"/>
       </wsdl:output>
       <wsdl:fault name="SomeException">
         <soap:fault name="SomeException" use="literal"/>
@@ -57,7 +66,7 @@
   </wsdl:binding>
 
   <wsdl:service name="SomeService">
-    <wsdl:port name="SomePort" binding="tns:SomeBinding">
+    <wsdl:port name="SomePort" binding="s:SomeBinding">
       <soap:address location="http://localhost:8080/Some"/>
     </wsdl:port>
   </wsdl:service>

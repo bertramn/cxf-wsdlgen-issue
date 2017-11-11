@@ -233,9 +233,10 @@
                       <wsdlOption>
                         <bindingFiles>
                           <bindingFile>classpath:/META-INF/types/types.episode</bindingFile>
+                          <bindingFile>classpath:/META-INF/model/model.episode</bindingFile>
                           <!-- reference the pre-processed episodes from our dependant schemata -->
-                          <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-model-${model.version}-jar/META-INF/sun-jaxb.episode
-                          </bindingFile>
+                          <!--<bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-model-${model.version}-jar/META-INF/sun-jaxb.episode-->
+                          <!--</bindingFile>-->
                           <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-util-${util.version}-jar/META-INF/sun-jaxb.episode
                           </bindingFile>
                         </bindingFiles>
