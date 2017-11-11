@@ -53,6 +53,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
+              <catalog>${project.basedir}/design-catalog.xml</catalog>
               <catalogs>
                 <catalog>
                   <dependencyResource>
@@ -63,6 +64,9 @@
                 </catalog>
               </catalogs>
               <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
+              <schemaExcludes>
+                <schemaExclude>**/SomeEntity.xsd</schemaExclude>
+              </schemaExcludes>
             </configuration>
           </execution>
         </executions>

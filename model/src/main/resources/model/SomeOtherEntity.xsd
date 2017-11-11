@@ -5,8 +5,9 @@
             xmlns:c="urn:types"
             elementFormDefault="qualified">
 
-  <xsd:include schemaLocation="urn:types:DataTypes.xsd"/>
-  <xsd:include schemaLocation="SomeEntity.xsd"/>
+  <xsd:import namespace="urn:types" schemaLocation="urn:types:DataTypes.xsd"/>
+
+  <xsd:include schemaLocation="urn:model:SomeEntity.xsd"/>
 
   <xsd:element name="SomeOtherDomainEntity" type="tns:SomeOtherDomainEntity"/>
   <xsd:complexType name="SomeOtherDomainEntity">

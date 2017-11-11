@@ -43,17 +43,11 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <catalogs>
-                <catalog>
-                  <fileset>
-                    <directory>${project.basedir}</directory>
-                    <includes>
-                      <include>**/design-catalog.xml</include>
-                    </includes>
-                  </fileset>
-                </catalog>
-              </catalogs>
-              <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
+              <catalog>${project.basedir}/design-catalog.xml</catalog>
+              <schemaExcludes>
+                <!-- exclude all schemata we are importing or including somewhere else XJC falls over -->
+                <schemaExclude>**/*Types.xsd</schemaExclude>
+              </schemaExcludes>
             </configuration>
           </execution>
         </executions>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="urn:types"
+<xsd:schema xmlns="urn:types"
+            targetNamespace="urn:types"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns="urn:types"
             xmlns:c="urn:types"
             elementFormDefault="qualified">
 
-  <xsd:include schemaLocation="urn:types:DataTypes.xsd"/>
+  <xsd:import namespace="urn:types" schemaLocation="urn:types:DataTypes.xsd"/>
 
   <xsd:complexType name="SomeCommonType">
     <xsd:sequence>

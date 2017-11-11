@@ -92,7 +92,7 @@
                 <targetCatalogFile>${project.build.outputDirectory}/${model.name}.cat</targetCatalogFile>
                 <catalog>
                   <system>
-                    <systemId>urn:types</systemId>
+                    <systemId>${model.uri}</systemId>
                     <appendSchemaFile>true</appendSchemaFile>
                   </system>
                 </catalog>
@@ -215,7 +215,8 @@
               <configuration>
                 <transformationSets>
                   <transformationSet>
-                    <outputDir>${project.build.outputDirectory}</outputDir>
+                    <addedToClasspath>false</addedToClasspath>
+                    <outputDir>${project.build.outputDirectory}/META-INF/</outputDir>
                     <dir>${project.build.directory}/generated-sources/episodes</dir>
                     <includes>
                       <include>**/*.episode</include>
@@ -225,7 +226,8 @@
                   <transformationSet>
                     <!-- have to do this again cause the CXF codegen has no ability
                       to look for multiple of the same binding files on META-INF/sun-jaxb.episode -->
-                    <outputDir>${project.build.outputDirectory}</outputDir>
+                    <addedToClasspath>false</addedToClasspath>
+                    <outputDir>${project.build.outputDirectory}/META-INF/${model.name}/</outputDir>
                     <dir>${project.build.directory}/generated-sources/episodes</dir>
                     <includes>
                       <include>**/*.episode</include>

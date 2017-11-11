@@ -50,7 +50,7 @@
         <groupId>io.fares.maven.plugins</groupId>
         <artifactId>design-builder-maven-plugin</artifactId>
       </plugin>
-      <!-- generate model bindings -->
+      <!-- generate message bindings -->
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>
@@ -63,12 +63,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <args>
-                <arg>-Xxew</arg>
-                <arg>-no-header</arg>
-                <arg>-npa</arg>
-                <arg>-enableIntrospection</arg>
-              </args>
+              <catalog>${project.basedir}/design-catalog.xml</catalog>
               <catalogs>
                 <catalog>
                   <dependencyResource>
@@ -85,16 +80,7 @@
                   </dependencyResource>
                 </catalog>
               </catalogs>
-              <episodes>
-                <episode>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>cxf-wsdlgen-issue-common</artifactId>
-                </episode>
-                <episode>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>cxf-wsdlgen-issue-model</artifactId>
-                </episode>
-              </episodes>
+              <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
             </configuration>
           </execution>
         </executions>
