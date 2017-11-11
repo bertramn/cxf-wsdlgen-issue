@@ -1,0 +1,22 @@
+<jaxb:bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               jaxb:extensionBindingPrefixes="xjc"
+               jaxb:version="2.1">
+
+  <jaxb:globalBindings xmlns:c="urn:types"
+                       fixedAttributeAsConstantProperty="true"
+                       generateElementProperty="false"
+                       generateIsSetMethod="false">
+
+    <jaxb:serializable uid="20171110"/>
+
+    <xjc:simple/>
+
+    <xjc:javaType name="org.joda.time.DateTime"
+                  xmlType="xsd:dateTime"
+                  adapter="io.github.bertramn.issues.DateTimeXmlAdapter"/>
+
+  </jaxb:globalBindings>
+
+</jaxb:bindings>

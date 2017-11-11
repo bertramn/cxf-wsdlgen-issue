@@ -2,12 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>io.github.bertramn.issues</groupId>
     <artifactId>cxf-wsdlgen-issue</artifactId>
     <version>1.0.0</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
+
   <artifactId>cxf-wsdlgen-issue-model</artifactId>
   <name>CXF wsdl2java Gen Issue Model</name>
 
@@ -61,12 +62,7 @@
                   </dependencyResource>
                 </catalog>
               </catalogs>
-              <episodes>
-                <episode>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>cxf-wsdlgen-issue-common</artifactId>
-                </episode>
-              </episodes>
+              <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
             </configuration>
           </execution>
         </executions>
@@ -75,42 +71,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xml-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformationSets>
-                <transformationSet>
-                  <outputDir>${project.build.outputDirectory}</outputDir>
-                  <dir>${project.build.directory}/generated-sources/episodes</dir>
-                  <includes>
-                    <include>**/*.episode</include>
-                  </includes>
-                  <stylesheet>${jaxb.episode.postprocessor}</stylesheet>
-                </transformationSet>
-                <transformationSet>
-                  <!-- have to do this again cause the CXF codegen has no ability
-                    to look for multiple of the same binding files on META-INF/sun-jaxb.episode -->
-                  <outputDir>${project.build.outputDirectory}</outputDir>
-                  <dir>${project.build.directory}/generated-sources/episodes</dir>
-                  <includes>
-                    <include>**/*.episode</include>
-                  </includes>
-                  <stylesheet>${jaxb.episode.postprocessor}</stylesheet>
-                  <fileMappers>
-                    <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
-                      <pattern>^.*(\.episode)$</pattern>
-                      <replacement>${model.name}$1</replacement>
-                    </fileMapper>
-                  </fileMappers>
-                </transformationSet>
-              </transformationSets>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

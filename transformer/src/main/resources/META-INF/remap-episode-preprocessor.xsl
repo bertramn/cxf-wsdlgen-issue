@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
 
-  <xsl:output method="xml" encoding="utf-8" omit-xml-declaration="no" indent="yes"/>
+  <xsl:output encoding="utf-8" indent="yes" method="xml" omit-xml-declaration="no"/>
 
   <xsl:strip-space elements="*"/>
 
+  <!--
+    Set the map attribute on the schemaBindings element to true to allow the
+    JAXB compiler to include the episode into the compilation context. It will not
+    generate any of the types in the schema package but allows for inclusion of
+    already generated types in the binding context. Nasty bug in XJC where it looses
+    track of types in compilation episodes.
+  -->
+
   <!-- take out the map binding -->
-  <xsl:template match="@map[parent::jaxb:schemaBindings]">
+  <xsl:template priority="10" match="@map[parent::jaxb:schemaBindings]">
     <xsl:attribute name="map">
       <xsl:value-of select="'true'"/>
     </xsl:attribute>
   </xsl:template>
 
   <!-- Identity template for copying everything else -->
-  <xsl:template match="@*[not(local-name() = 'map' and parent::jaxb:schemaBindings)] | node()[not(self::comment())]" name="identity">
+  <xsl:template name="identity" match="node() | @*">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*"/>
     </xsl:copy>

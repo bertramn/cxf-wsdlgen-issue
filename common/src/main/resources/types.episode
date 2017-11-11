@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<jaxb:bindings version="2.1" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
-  <!-- we need to prevent any consideration oc chameleon schemata -->
-  <jaxb:bindings if-exists="true" scd="x-schema::">
-    <jaxb:schemaBindings map="false"/>
-  </jaxb:bindings>
-</jaxb:bindings>

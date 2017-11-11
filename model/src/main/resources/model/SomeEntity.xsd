@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="urn:model" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:tns="urn:model" elementFormDefault="qualified"
-            attributeFormDefault="unqualified">
+<xsd:schema targetNamespace="urn:model"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="urn:model"
+            xmlns:c="urn:types"
+            elementFormDefault="qualified">
 
   <xsd:include schemaLocation="urn:types:DataTypes.xsd"/>
+  <xsd:import namespace="urn:types" schemaLocation="urn:types:Common.xsd"/>
 
   <xsd:element name="SomeDomainEntity" type="tns:SomeDomainEntity"/>
   <xsd:complexType name="SomeDomainEntity">
     <xsd:sequence>
       <xsd:element name="Description" type="xsd:string" minOccurs="1"/>
       <xsd:element ref="tns:Contacts"/>
+      <xsd:element name="TimeZone" type="tns:TimeZone"/>
+      <xsd:element name="ArrivalTime" type="xsd:dateTime"/>
+      <xsd:element name="CommonSomething" type="c:SomeCommonType"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="tns:ObjectId" use="required"/>
   </xsd:complexType>
@@ -26,8 +32,8 @@
   </xsd:element>
   <xsd:complexType name="ContactList">
     <xsd:choice maxOccurs="99">
-      <xsd:element ref="tns:HomeContact" minOccurs="1"/>
-      <xsd:element ref="tns:BusinessContact" minOccurs="1"/>
+      <xsd:element ref="tns:HomeContact"/>
+      <xsd:element ref="tns:BusinessContact"/>
     </xsd:choice>
   </xsd:complexType>
 

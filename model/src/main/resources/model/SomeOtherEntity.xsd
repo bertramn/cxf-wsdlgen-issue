@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:model"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="urn:model"
+            xmlns:c="urn:types"
+            elementFormDefault="qualified">
+
+  <xsd:include schemaLocation="urn:types:DataTypes.xsd"/>
+  <xsd:include schemaLocation="SomeEntity.xsd"/>
+
+  <xsd:element name="SomeOtherDomainEntity" type="tns:SomeOtherDomainEntity"/>
+  <xsd:complexType name="SomeOtherDomainEntity">
+    <xsd:sequence>
+      <xsd:element name="Made" type="c:TimeZone"/>
+      <xsd:element ref="tns:Contacts"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

@@ -20,6 +20,12 @@
   </modules>
 
   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+    </plugins>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -57,7 +63,8 @@
                 <targetCatalogFile>${project.build.outputDirectory}/${model.name}.cat</targetCatalogFile>
                 <catalog>
                   <system>
-                    <defaultSystemId>urn:types</defaultSystemId>
+                    <systemId>urn:types</systemId>
+                    <appendSchemaFile>true</appendSchemaFile>
                   </system>
                 </catalog>
                 <includes>
@@ -79,10 +86,6 @@
               <extraargs>
                 <extraarg>-xjc-Xxew</extraarg>
                 <extraarg>-xjc-enableIntrospection</extraarg>
-                <!-- disable the package header in this compilation as we already have one that is going to be shaded in -->
-                <extraarg>-xjc-npa</extraarg>
-                <!-- no pesky boilerplate in sources -->
-                <extraarg>-xjc-no-header</extraarg>
                 <extraarg>-verbose</extraarg>
                 <extraarg>-autoNameResolution</extraarg>
                 <extraarg>-aer</extraarg>
@@ -174,6 +177,42 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>xml-maven-plugin</artifactId>
           <version>1.0.1</version>
+          <executions>
+            <execution>
+              <phase>process-sources</phase>
+              <goals>
+                <goal>transform</goal>
+              </goals>
+              <configuration>
+                <transformationSets>
+                  <transformationSet>
+                    <outputDir>${project.build.outputDirectory}</outputDir>
+                    <dir>${project.build.directory}/generated-sources/episodes</dir>
+                    <includes>
+                      <include>**/*.episode</include>
+                    </includes>
+                    <stylesheet>${jaxb.episode.postprocessor}</stylesheet>
+                  </transformationSet>
+                  <transformationSet>
+                    <!-- have to do this again cause the CXF codegen has no ability
+                      to look for multiple of the same binding files on META-INF/sun-jaxb.episode -->
+                    <outputDir>${project.build.outputDirectory}</outputDir>
+                    <dir>${project.build.directory}/generated-sources/episodes</dir>
+                    <includes>
+                      <include>**/*.episode</include>
+                    </includes>
+                    <stylesheet>${jaxb.episode.postprocessor}</stylesheet>
+                    <fileMappers>
+                      <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
+                        <pattern>^.*(\.episode)$</pattern>
+                        <replacement>${model.name}$1</replacement>
+                      </fileMapper>
+                    </fileMappers>
+                  </transformationSet>
+                </transformationSets>
+              </configuration>
+            </execution>
+          </executions>
           <dependencies>
             <dependency>
               <groupId>net.sf.saxon</groupId>
@@ -192,6 +231,54 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
           <version>3.0.0</version>
+        </plugin>
+        <!-- ensure some things just dont sneak into the model -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.4.1</version>
+          <executions>
+            <execution>
+              <id>enforce-versions</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>3.3.0</version>
+                  </requireMavenVersion>
+                  <requireJavaVersion>
+                    <version>1.8</version>
+                  </requireJavaVersion>
+                </rules>
+              </configuration>
+            </execution>
+            <execution>
+              <id>check-jaxb-generated-imports</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <phase>compile</phase>
+              <configuration>
+                <rules>
+                  <restrictImports implementation="de.skuzzle.enforcer.restrictimports.RestrictImports">
+                    <reason>Nobody wants to deal with this XML date crap</reason>
+                    <basePackage>**</basePackage>
+                    <includeTestCode>true</includeTestCode>
+                    <bannedImport>javax.xml.datatype.XMLGregorianCalendar</bannedImport>
+                  </restrictImports>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>de.skuzzle.enforcer</groupId>
+              <artifactId>restrict-imports-enforcer-rule</artifactId>
+              <version>0.8.0</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <!-- ant used to clean up after xjc generating too many object factories in service binding -->
         <plugin>

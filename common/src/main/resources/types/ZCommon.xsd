@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:types"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:c="urn:types"
+            elementFormDefault="qualified">
+
+  <xsd:include schemaLocation="DataTypes.xsd"/>
+
+  <xsd:complexType name="SomeCommonType">
+    <xsd:sequence>
+      <xsd:element name="FancyTime" type="xsd:dateTime"/>
+      <xsd:element name="FancyTimeZone" type="c:TimeZone"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>
