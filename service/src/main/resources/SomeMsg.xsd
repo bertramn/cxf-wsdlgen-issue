@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="urn:service"
+<xsd:schema xmlns="urn:service"
+            targetNamespace="urn:service"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns="urn:service"
             xmlns:s="urn:service"
-            xmlns:m="urn:model"
             elementFormDefault="qualified">
-
-  <xsd:import namespace="urn:model" schemaLocation="urn:model:SomeEntity.xsd"/>
 
   <xsd:element name="SomeRQ" type="s:SomeRQ"/>
   <xsd:complexType name="SomeRQ">
     <xsd:sequence>
       <xsd:element name="CustomerId" type="xsd:string"/>
-    </xsd:sequence>
-  </xsd:complexType>
-
-  <xsd:element name="SomeRS" type="s:SomeRS"/>
-  <xsd:complexType name="SomeRS">
-    <xsd:sequence>
-      <xsd:element ref="m:SomeDomainEntity"/>
     </xsd:sequence>
   </xsd:complexType>
 

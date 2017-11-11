@@ -34,6 +34,11 @@
     </dependency>
     <!-- for debug purposes -->
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cxf-wsdlgen-xjc-plugin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-tools-wsdlto-databinding-jaxb</artifactId>
       <version>${cxf.version}</version>
@@ -206,8 +211,8 @@
                           <include>**/*.episode</include>
                         </includes>
                         <!--<excludes>-->
-                          <!--&lt;!&ndash; never re-map chameleon schema from common types back in &ndash;&gt;-->
-                          <!--<exclude>cxf-wsdlgen-issue-common-*/**</exclude>-->
+                        <!--&lt;!&ndash; never re-map chameleon schema from common types back in &ndash;&gt;-->
+                        <!--<exclude>cxf-wsdlgen-issue-common-*/**</exclude>-->
                         <!--</excludes>-->
                         <stylesheet>/META-INF/remap-episode-preprocessor.xsl</stylesheet>
                       </transformationSet>
@@ -233,11 +238,13 @@
                       <wsdlOption>
                         <bindingFiles>
                           <bindingFile>classpath:/META-INF/types/types.episode</bindingFile>
-                          <bindingFile>classpath:/META-INF/model/model.episode</bindingFile>
+                          <!--<bindingFile>classpath:/META-INF/model/model.episode</bindingFile>-->
                           <!-- reference the pre-processed episodes from our dependant schemata -->
-                          <!--<bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-model-${model.version}-jar/META-INF/sun-jaxb.episode-->
-                          <!--</bindingFile>-->
-                          <bindingFile>${project.build.directory}/episodes/cxf-wsdlgen-issue-util-${util.version}-jar/META-INF/sun-jaxb.episode
+                          <bindingFile>
+                            ${project.build.directory}/episodes/cxf-wsdlgen-issue-model-${model.version}-jar/META-INF/sun-jaxb.episode
+                          </bindingFile>
+                          <bindingFile>
+                            ${project.build.directory}/episodes/cxf-wsdlgen-issue-util-${util.version}-jar/META-INF/sun-jaxb.episode
                           </bindingFile>
                         </bindingFiles>
                         <wsdl>classpath:/META-INF/SomeService.wsdl</wsdl>

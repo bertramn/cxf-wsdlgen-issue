@@ -6,6 +6,7 @@
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:f="urn:util"
+                  xmlns:m="urn:model"
                   xmlns:s="urn:service">
 
   <wsdl:types>
@@ -13,6 +14,8 @@
                 targetNamespace="urn:service"
                 xmlns:f="urn:util"
                 elementFormDefault="qualified">
+
+      <xsd:import namespace="urn:model" schemaLocation="urn:model:SomeEntity.xsd"/>
 
       <xsd:import namespace="urn:util" schemaLocation="urn:util:Fault.xsd"/>
 
@@ -34,7 +37,7 @@
   </wsdl:message>
 
   <wsdl:message name="SomeResponse">
-    <wsdl:part name="out" element="s:SomeRS"/>
+    <wsdl:part name="out" element="m:SomeDomainEntity"/>
   </wsdl:message>
 
   <wsdl:message name="SomeException">
