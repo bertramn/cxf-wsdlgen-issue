@@ -57,6 +57,14 @@ public class TypeHarvesterPlugin extends Plugin {
               for (BIDeclaration decl : bindInfo.getDecls()) {
                 if (decl instanceof BIClass) {
                   BIClass refClazz = (BIClass) decl;
+                  String classRefName = refClazz.getExistingClassRef();
+                  int lastDot = classRefName.lastIndexOf('.');
+                  String classRefPackage = null;
+                  if(lastDot > 0) {
+                    classRefPackage = classRefName.substring(0, lastDot);
+                    classRefName = classRefName.substring(lastDot + 1);
+                  }
+                  model.options.classNameAllocator.assignClassName(classRefPackage, classRefName);
                   log.warning(String.format("{%s}%s => %s", schema.getTargetNamespace(), element, refClazz.getExistingClassRef()));
                 }
               }

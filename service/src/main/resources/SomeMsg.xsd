@@ -12,4 +12,11 @@
     </xsd:sequence>
   </xsd:complexType>
 
+  <xsd:element name="SomeRS" type="s:SomeRS"/>
+  <xsd:complexType name="SomeRS">
+    <xsd:sequence>
+      <xsd:element name="Response" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
 </xsd:schema>

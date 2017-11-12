@@ -37,7 +37,7 @@
   </wsdl:message>
 
   <wsdl:message name="SomeResponse">
-    <wsdl:part name="out" element="m:SomeDomainEntity"/>
+    <wsdl:part name="out" element="s:SomeRS"/>
   </wsdl:message>
 
   <wsdl:message name="SomeException">
